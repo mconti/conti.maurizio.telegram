@@ -26,6 +26,8 @@ namespace conti.maurizio.telegram
     {
         // Libreria utilizzata telegram.bot
         // https://github.com/MrRoundRobin/telegram.bot
+
+        Api Bot = new Api(CodiceSegreto.Token);
         DispatcherTimer timer = new DispatcherTimer();
         int offset = 0;
         bool stato = false;
