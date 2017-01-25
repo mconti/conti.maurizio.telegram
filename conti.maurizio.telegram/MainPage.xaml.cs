@@ -69,9 +69,10 @@ namespace conti.maurizio.telegram
                                             stato = ToggleLED(stato);
 
                                             if( stato)
-                                                await Bot.SendTextMessageAsync(message.Chat.Id, "Acceso", replyToMessageId: message.MessageId);
+                                                await Bot.SendTextMessageAsync(message.Chat.Id, $"Grazie {message.From.Username} per aver Acceso il faretto FLR", replyToMessageId: message.MessageId);
                                             else
-                                                await Bot.SendTextMessageAsync(message.Chat.Id, "Spento", replyToMessageId: message.MessageId);
+                                                await Bot.SendTextMessageAsync(message.Chat.Id, $"Grazie {message.From.Username} per aver Spento il faretto FLR", replyToMessageId: message.MessageId);
+
                                             break;
 
                                         case "/status":
@@ -82,7 +83,8 @@ namespace conti.maurizio.telegram
                                             break;
 
                                         default:
-                                            await Bot.SendTextMessageAsync(message.Chat.Id, $"{message.Text} ??", replyToMessageId: message.MessageId);
+                                            string helpMessage = $"{message.Text} ??\nComandi disponibili:\n/status\n/toggle\n";
+                                            await Bot.SendTextMessageAsync(message.Chat.Id, helpMessage, replyToMessageId: message.MessageId);
                                             break;
                                     }
                                     break;
