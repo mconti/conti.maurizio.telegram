@@ -27,7 +27,8 @@ namespace conti.maurizio.telegram
         // Libreria utilizzata telegram.bot
         // https://github.com/MrRoundRobin/telegram.bot
 
-        Api Bot = new Api(CodiceSegreto.Token);
+        Api Bot { get; set; }
+
         DispatcherTimer timer = new DispatcherTimer();
         int offset = 0;
         bool stato = false;
@@ -35,6 +36,9 @@ namespace conti.maurizio.telegram
         public MainPage()
         {
             this.InitializeComponent();
+
+            string tokenTelegram = "";
+            Bot = new Api(tokenTelegram);
 
             timer.Interval = TimeSpan.FromMilliseconds(300);
             timer.Tick += Timer_Tick;
@@ -65,11 +69,14 @@ namespace conti.maurizio.telegram
 
                                     switch (message.Text)
                                     {
+                                        case "/start":
+                                            break;
+
                                         case "/toggle":
                                             stato = ToggleLED(stato);
 
-                                            if( stato)
-                                                await Bot.SendTextMessageAsync(message.Chat.Id, $"Grazie {message.From.Username} per aver Acceso il faretto FLR", replyToMessageId: message.MessageId);
+                                            if (stato)
+                                                await Bot.SendTextMessageAsync(message.Chat.Id, $"Grazie {message.From.Username} per aver Accesssssso il faretto FLR", replyToMessageId: message.MessageId);
                                             else
                                                 await Bot.SendTextMessageAsync(message.Chat.Id, $"Grazie {message.From.Username} per aver Spento il faretto FLR", replyToMessageId: message.MessageId);
 
