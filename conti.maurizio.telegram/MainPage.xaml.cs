@@ -27,7 +27,7 @@ namespace conti.maurizio.telegram
         // Libreria utilizzata telegram.bot
         // https://github.com/MrRoundRobin/telegram.bot
 
-        Api Bot = new Api(CodiceSegreto.Token);
+        Api Bot = new Api("Token ottenuto da GodFather...");
         DispatcherTimer timer = new DispatcherTimer();
         int offset = 0;
         bool stato = false;
@@ -36,11 +36,11 @@ namespace conti.maurizio.telegram
         {
             this.InitializeComponent();
 
-            timer.Interval = TimeSpan.FromMilliseconds(300);
+            timer.Interval = TimeSpan.FromMilliseconds(600);
             timer.Tick += Timer_Tick;
             timer.Start();
         }
-
+        
         private async void Timer_Tick(object sender, object e)
         {
             timer.Stop();
@@ -54,43 +54,52 @@ namespace conti.maurizio.telegram
 
                 foreach (var update in updates)
                 {
-                    switch (update.Type)
-                    {
-                        case UpdateType.MessageUpdate:
-                            var message = update.Message;
-
-                            switch (message.Type)
-                            {
-                                case MessageType.TextMessage:
-
-                                    switch (message.Text)
-                                    {
-                                        case "/toggle":
-                                            stato = ToggleLED(stato);
-
-                                            if( stato)
-                                                await Bot.SendTextMessageAsync(message.Chat.Id, "Acceso", replyToMessageId: message.MessageId);
-                                            else
-                                                await Bot.SendTextMessageAsync(message.Chat.Id, "Spento", replyToMessageId: message.MessageId);
-                                            break;
-
-                                        case "/status":
-                                            if (stato)
-                                                await Bot.SendTextMessageAsync(message.Chat.Id, "Acceso", replyToMessageId: message.MessageId);
-                                            else
-                                                await Bot.SendTextMessageAsync(message.Chat.Id, "Spento", replyToMessageId: message.MessageId);
-                                            break;
-
-                                        default:
-                                            await Bot.SendTextMessageAsync(message.Chat.Id, $"{message.Text} ??", replyToMessageId: message.MessageId);
-                                            break;
-                                    }
-                                    break;
-                            }
-                            break;
-                    }
-
                     offset = update.Id + 1;
+
+                    var message = update.Message;
+                    if (message != null)
+                    {
+                        switch (message.Type)
+                        {
+                            case MessageType.TextMessage:
+
+                                log.Items.Add($"{message.Date.ToLocalTime()} id:{message.MessageId} (offset:{offset})'{message.Text}' from:{message.From.Username}");
+                                switch (message.Text)
+                                {
+                                    case "/toggle":
+                                        stato = ToggleLED(stato);
+                                        if (stato)
+                                            await Bot.SendTextMessageAsync(message.Chat.Id, "Acceso", replyToMessageId: message.MessageId);
+                                        else
+                                            await Bot.SendTextMessageAsync(message.Chat.Id, "Spento", replyToMessageId: message.MessageId);
+                                        break;
+
+                                    case "/ledon":
+                                        LedOn();
+                                        await Bot.SendTextMessageAsync(message.Chat.Id, "Acceso", replyToMessageId: message.MessageId);
+                                        break;
+
+                                    case "/ledoff":
+                                        LedOff();
+                                        await Bot.SendTextMessageAsync(message.Chat.Id, "Spento", replyToMessageId: message.MessageId);
+                                        break;
+
+                                    case "/status":
+                                        if (stato)
+                                            await Bot.SendTextMessageAsync(message.Chat.Id, "Acceso", replyToMessageId: message.MessageId);
+                                        else
+                                            await Bot.SendTextMessageAsync(message.Chat.Id, "Spento", replyToMessageId: message.MessageId);
+                                        break;
+
+                                    default:
+                                        await Bot.SendTextMessageAsync(message.Chat.Id, $"{message.Text} ??", replyToMessageId: message.MessageId);
+                                        break;
+                                }
+                                break;
+                        }
+                        break;
+                    }
+               
                 }
             }
             catch (Exception err)
@@ -101,14 +110,24 @@ namespace conti.maurizio.telegram
             timer.Start();
         }
 
-        private bool ToggleLED( bool stato )
+        private bool ToggleLED(bool stato)
         {
             if (stato)
-                btn.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0));
+                LedOn();
             else
-                btn.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 0));
+                LedOff();
 
             return !stato;
+        }
+
+        private void LedOn()
+        {
+            btn.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0));
+        }
+
+        private void LedOff()
+        {
+            btn.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 0));
         }
 
     }
