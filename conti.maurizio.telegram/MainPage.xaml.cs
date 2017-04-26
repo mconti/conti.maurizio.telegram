@@ -26,8 +26,8 @@ namespace conti.maurizio.telegram
     {
         // Libreria utilizzata telegram.bot
         // https://github.com/MrRoundRobin/telegram.bot
+        Api Bot { get; set; }
 
-        Api Bot = new Api("Token ottenuto da GodFather...");
         DispatcherTimer timer = new DispatcherTimer();
         int offset = 0;
         bool stato = false;
@@ -36,6 +36,9 @@ namespace conti.maurizio.telegram
         {
             this.InitializeComponent();
 
+            //... Token ottenuto da GodFather!
+            Bot = new Api("250906422:AAHyM0fVCSrf7sgiLrT949Flff9nPmSrKg8");
+            
             timer.Interval = TimeSpan.FromMilliseconds(600);
             timer.Tick += Timer_Tick;
             timer.Start();
@@ -59,47 +62,42 @@ namespace conti.maurizio.telegram
                     var message = update.Message;
                     if (message != null)
                     {
-                        switch (message.Type)
+                        if (message.Type == MessageType.TextMessage)
                         {
-                            case MessageType.TextMessage:
-
-                                log.Items.Add($"{message.Date.ToLocalTime()} id:{message.MessageId} (offset:{offset})'{message.Text}' from:{message.From.Username}");
-                                switch (message.Text)
-                                {
-                                    case "/toggle":
-                                        stato = ToggleLED(stato);
-                                        if (stato)
-                                            await Bot.SendTextMessageAsync(message.Chat.Id, "Acceso", replyToMessageId: message.MessageId);
-                                        else
-                                            await Bot.SendTextMessageAsync(message.Chat.Id, "Spento", replyToMessageId: message.MessageId);
-                                        break;
-
-                                    case "/ledon":
-                                        LedOn();
+                            log.Items.Add($"{message.Date.ToLocalTime()} id:{message.MessageId} (offset:{offset})'{message.Text}' from:{message.From.Username}");
+                            switch (message.Text)
+                            {
+                                case "/toggle":
+                                    stato = ToggleLED(stato);
+                                    if (stato)
                                         await Bot.SendTextMessageAsync(message.Chat.Id, "Acceso", replyToMessageId: message.MessageId);
-                                        break;
-
-                                    case "/ledoff":
-                                        LedOff();
+                                    else
                                         await Bot.SendTextMessageAsync(message.Chat.Id, "Spento", replyToMessageId: message.MessageId);
-                                        break;
+                                    break;
 
-                                    case "/status":
-                                        if (stato)
-                                            await Bot.SendTextMessageAsync(message.Chat.Id, "Acceso", replyToMessageId: message.MessageId);
-                                        else
-                                            await Bot.SendTextMessageAsync(message.Chat.Id, "Spento", replyToMessageId: message.MessageId);
-                                        break;
+                                case "/ledon":
+                                    LedOn();
+                                    await Bot.SendTextMessageAsync(message.Chat.Id, "Acceso", replyToMessageId: message.MessageId);
+                                    break;
 
-                                    default:
-                                        await Bot.SendTextMessageAsync(message.Chat.Id, $"{message.Text} ??", replyToMessageId: message.MessageId);
-                                        break;
-                                }
-                                break;
+                                case "/ledoff":
+                                    LedOff();
+                                    await Bot.SendTextMessageAsync(message.Chat.Id, "Spento", replyToMessageId: message.MessageId);
+                                    break;
+
+                                case "/status":
+                                    if (stato)
+                                        await Bot.SendTextMessageAsync(message.Chat.Id, "Acceso", replyToMessageId: message.MessageId);
+                                    else
+                                        await Bot.SendTextMessageAsync(message.Chat.Id, "Spento", replyToMessageId: message.MessageId);
+                                    break;
+
+                                default:
+                                    await Bot.SendTextMessageAsync(message.Chat.Id, $"{message.Text} ??", replyToMessageId: message.MessageId);
+                                    break;
+                            }
                         }
-                        break;
                     }
-               
                 }
             }
             catch (Exception err)

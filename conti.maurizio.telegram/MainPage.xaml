@@ -9,9 +9,9 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel Orientation="Vertical">
+            <TextBlock>Lanciare telegram, cercare il bot @FlrBot e inviare il comando /status</TextBlock>
             <Button x:Name="btn" Width="300" Height="100" ></Button>
             <ListView x:Name="log" Header="Log..." Margin="10"></ListView>
-
         </StackPanel>
     </Grid>
 </Page>
