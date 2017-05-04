@@ -37,7 +37,7 @@ namespace conti.maurizio.telegram
             this.InitializeComponent();
 
             //... Token ottenuto da GodFather!
-            Bot = new Api("250906422:AAHyM0fVCSrf7sgiLrT949Flff9nPmSrKg8");
+            Bot = new Api("250906422:AAFBa2OI23FXqa_OK976QguOHYJtxzbddx0");
             
             timer.Interval = TimeSpan.FromMilliseconds(600);
             timer.Tick += Timer_Tick;
