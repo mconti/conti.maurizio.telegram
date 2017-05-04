@@ -11,4 +11,4 @@ Spegne il led.
 `/status`<br/>
 Ritorna lo stato del led.
 
-Nella cartella ESP8266, si trova la versione per ESP8266
+Nella cartella ESPBotLamp, si trova la versione per ESP8266
