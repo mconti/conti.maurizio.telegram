@@ -16,8 +16,8 @@
 #include <UniversalTelegramBot.h>
 
 // parametri di connessione
-char ssid[] = "IoT";     
-char password[] = "Ivan2017!"; 
+char ssid[] = "flr@smd2017";     
+char password[] = "FabLabRomagna2017!"; 
 
 // Telegram bot Token preso con Botfather
 #define TelegramToken "250906422:AAFBa2OI23FXqa_OK976QguOHYJtxzbddx0"  
